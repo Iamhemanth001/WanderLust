@@ -9,7 +9,7 @@ const upload = multer({storage});
 
 const listingController = require("../controllers/listings.js");
 
-//Index Route & Create Route
+// Index Route & Create Route
 router.route("/")
 .get(wrapAsync(listingController.index))
 .post(

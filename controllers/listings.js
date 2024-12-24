@@ -11,6 +11,34 @@ module.exports.renderNewForm = (req,res)=>{
 };
 
 module.exports.createNewListing = async (req,res,next) => {
+    const fetch = (await import('node-fetch')).default;
+    const address = req.body.listing.location + ', ' + req.body.listing.country;
+    const mapApi = process.env.MAP_API;
+
+    const geocodeAddress = async (address) => {
+        const url = `https://geocode.search.hereapi.com/v1/geocode?q=${encodeURIComponent(address)}&apikey=${mapApi}`;
+    
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.items[0].position; // Return the geocoded position
+        } catch (error) {
+            console.error("Error geocoding address:", error);
+            return null;
+        }
+    };
+
+    const position = await geocodeAddress(address);
+    if (!position) {
+        req.flash("error", "Error geocoding address. Please try again.");
+        return res.redirect("/listings/new");
+    }
+
+    // console.log(position);
+
     let url = req.file.path;
     let filename = req.file.filename;
     let listing = req.body.listing;
@@ -18,6 +46,10 @@ module.exports.createNewListing = async (req,res,next) => {
     const newListing = new Listing(listing);
     newListing.owner = req.user._id;
     newListing.image = {url,filename};
+    newListing.geometry = {
+        type: "Point",
+        coordinates: [position.lng, position.lat]
+    };
     await newListing.save();
     req.flash("success","New Listing Created!");
     res.redirect("/listings");
@@ -64,7 +96,7 @@ module.exports.updateListing = async (req,res) => {
 module.exports.destroyListing = async (req,res)=>{
     let {id} = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
+    // console.log(deletedListing);
     req.flash("success","Listing Deleted Successfully!");
     res.redirect("/listings");
 };

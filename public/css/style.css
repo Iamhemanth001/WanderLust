@@ -109,7 +109,7 @@ body{
 /* Show page */
 
 .show-img{
-    height: 30Vh;
+    height: 40Vh;
 }
 
 .btns{
@@ -143,4 +143,11 @@ input[type="number"]::-webkit-outer-spin-button {
 .floating-alert.show {
     opacity: 1; /* Make the alert visible */
     transform: translateY(0); /* Bring the alert into view */
+}
+
+/* map  */
+
+#map {
+    width: 80vh;
+    height: 400px;
 }

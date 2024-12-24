@@ -31,7 +31,6 @@ const sessionOptions = {
     }
 };
 
-
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
@@ -45,9 +44,9 @@ app.listen(port,()=>{
 });
 
 
-app.get("/",(req,res)=>{
-    res.send("Hi, I am root");
-});
+// app.get("/",(req,res)=>{
+//     res.send("Hi, I am root");
+// });
 
 app.use(session(sessionOptions));
 app.use(flash());

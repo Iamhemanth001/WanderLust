@@ -195,3 +195,54 @@
     -webkit-transition: background-position .7s;
     transition: background-position .7s;
   }
+
+
+  /* Comment box */
+
+  /* General styling for the container */
+/* .textarea-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 10px;
+} */
+
+/* Styling for the textarea */
+.custom-comment {
+  width: 100%;
+  height: 200px; /* Adjust as needed */
+  padding: 10px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: none; /* Disables drag-to-resize */
+  overflow-y: auto; /* Enables vertical scrolling */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern scrollbar styling */
+.custom-comment::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.custom-comment::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track background */
+  border-radius: 5px;
+}
+
+.custom-comment::-webkit-scrollbar-thumb {
+  background: #3790f0; /* Scrollbar thumb color */
+  border-radius: 5px;
+}
+
+.custom-comment::-webkit-scrollbar-thumb:hover {
+  background: #5fa6f1; /* Thumb color on hover */
+}
+
+/* Optional focus effect */
+.custom-comment:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
