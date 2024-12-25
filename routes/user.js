@@ -13,11 +13,30 @@ router.route("/signup")
 
 router.route("/login")
 .get(userController.renderLoginForm)
-.post(saveRedirectUrl,
-    passport.authenticate("local",{failureRedirect: '/login',failureFlash: true}),
-    wrapAsync(userController.login
-));
+.post(
+    saveRedirectUrl,
+    passport.authenticate("local", {
+        failureRedirect: '/login',
+        failureFlash: true
+    }),
+    wrapAsync(userController.login)
+);
+
 
 router.get("/logout",userController.logout);
+
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/google/callback', 
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+        res.redirect('/listings');
+});
+
+router.get('/forgot-password', userController.renderForgotPasswordForm);
+router.post('/forgot-password', wrapAsync(userController.handleForgotPassword));
+
+router.get('/reset-password/:token', wrapAsync(userController.renderResetPasswordForm));
+router.post('/reset-password/:token', wrapAsync(userController.handleResetPassword));
 
 module.exports = router;

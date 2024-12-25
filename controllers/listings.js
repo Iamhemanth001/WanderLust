@@ -1,8 +1,20 @@
 const Listing = require("../models/listing");
 
-module.exports.index = async (req,res) =>{
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs",{allListings});
+module.exports.index = async (req, res) => {
+    const { category } = req.query;
+    let filter = {};
+    if (category) {
+        if (category === "MyListings" && req.user) {
+            filter.owner = req.user._id;
+        } else if (category === "MyListings" && !(req.user)) {
+            req.flash("error", "You need to be logged in to view your listings.");
+            return res.redirect("/login");
+        } else {
+            filter.category = category;
+        }
+    }
+    const allListings = await Listing.find(filter);
+    res.render("listings/index.ejs", { allListings });
 };
 
 module.exports.renderNewForm = (req,res)=>{
@@ -66,16 +78,18 @@ module.exports.showListing = async (req,res) => {
     res.render("listings/show.ejs",{listing});
 };
 
-module.exports.editListing = async (req,res) => {
-    let {id} = req.params;
+module.exports.editListing = async (req, res) => {
+    let { id } = req.params;
     const listing = await Listing.findById(id);
-    if(!listing){
-        req.flash("error","Listing you requested for does not exits");
-        res.redirect("/listings");
+    if (!listing) {
+        req.flash("error", "Listing you requested for does not exist");
+        return res.redirect("/listings");
     }
+
     let originalImgUrl = listing.image.url;
-    originalImgUrl = originalImgUrl.replace("/upload","/upload/w_250");
-    res.render("listings/edit.ejs",{listing,originalImgUrl});
+    originalImgUrl = originalImgUrl.replace("/upload", "/upload/w_250"); // Resize image
+
+    res.render("listings/edit.ejs", { listing, originalImgUrl });
 };
 
 module.exports.updateListing = async (req,res) => {
@@ -99,4 +113,26 @@ module.exports.destroyListing = async (req,res)=>{
     // console.log(deletedListing);
     req.flash("success","Listing Deleted Successfully!");
     res.redirect("/listings");
+};
+
+module.exports.searchListings = async (req, res) => {
+    const { s } = req.query;
+    if (!s || typeof s !== 'string') {
+        req.flash("error", "Please enter a valid search term.");
+        return res.redirect("/listings");
+    }
+    const listings = await Listing.find({
+        $or: [
+            { location: { $regex: s, $options: "i" } },
+            { title: { $regex: s, $options: "i" } },
+            { category: { $regex: s, $options: "i" } },
+            { country: { $regex: s, $options: "i" } }
+        ]
+    });
+
+    if(listings.length === 0){
+        req.flash("error","No Listings Found!");
+        return res.redirect("/listings");
+    }
+    res.render("listings/index.ejs", { allListings: listings });
 };

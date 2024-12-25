@@ -1,29 +1,159 @@
 <% layout("/layouts/boilerplate") %>
 
-<h1 class="offset-3 col6 mt-3">Signup on WanderLust</h1>
+<style>
+    
+.input-group {
+    display: flex;
+}
 
-<div class="row mt-3">
-    <div class="col-6 offset-3">
-        <form action="/signup" method="post" novalidate class="needs-validation"> 
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input name="username" id="username" placeholder="Username" type="text" class="form-control" required>
-                <div class="valid-feedback">looks Good!</div>              
+.input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control, .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select, .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.input-group .form-control {
+    padding-right: 40px; /* Ensure space for the button */
+}
+
+.input-group .input-btn {
+    border-top-left-radius: 0; /* Remove the border-radius on the left side */
+    border-bottom-left-radius: 0;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    padding: 0 12px; /* Adjust padding for button size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.input-btn i {
+    font-size: 1.2rem;
+    color: #aaa;
+}
+
+.input-btn:hover i {
+    color: #495057;
+}
+.separator {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid #ccc;
+}
+.separator span {
+    margin: 0 10px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.custom-card {
+    box-shadow: 1px 3px 7px 5px #808080f7;
+    width: 70vh;
+    margin: auto;
+    border-radius: 20px;
+    padding: 20px;
+    height: auto;
+}
+</style>
+
+
+<div class="row mt-3 mb-3">
+    <div class="custom-card">
+
+        <h1 class="mb-4 text-center">Signup on WanderLust</h1>
+        <div class="col-12">
+            <form action="/signup" method="post" novalidate class="needs-validation"> 
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input name="username" id="username" placeholder="Username" type="text" class="form-control" required>
+                    <div class="valid-feedback">Looks Good!</div>              
+                </div>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input name="email" id="email" placeholder="Email" type="email" class="form-control" required>
+                    <div class="invalid-feedback">Please enter a valid email.</div>              
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input name="password" id="password" placeholder="Password" type="password" class="form-control" required>
+                        <button class="btn input-btn" type="button" id="togglePassword">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Please enter a password.</div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="password2" class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                        <input name="password2" id="password2" placeholder="Confirm Password" type="password" class="form-control" required>
+                        <button class="btn input-btn" type="button" id="togglePassword2">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                </div>
+                <div class="invalid-feedback">Please confirm your password.</div>
             </div>
             
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input name="email" id="email" placeholder="Email" type="email" class="form-control" required></input>
-                <div class="invalid-feedback">Please enter a short description</div>              
+            <button class="btn btn-success" style="width: 100%;">Signup</button>
+            
+            <div class="text-center mt-1">
+                <div class="separator mt-4">
+                    <span>Or sign up with</span>
+                </div>
+                <button type="button" class="btn btn-outline-danger" id="googleSignUp" onclick="window.location.href='/auth/google'">
+                    <i class="fa fa-google"></i> Sign up with Google
+                </button>
             </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input name="password" id="password" placeholder="Password" type="password" class="form-control" required></input>
-                <div class="invalid-feedback">Please ente</div>              
-            </div>
-            <button class="btn btn-success">Signup</button>
         </form>
 
+        <p class="text-small mt-4 text-center text-muted">
+            Already have an account? <a href="/login" class="text-decoration-none text-danger">Login</a>
+        </p>
+        
+    </div>
     </div>
 </div>
+
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+    togglePassword.addEventListener('click', function () {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+    const togglePassword2 = document.querySelector('#togglePassword2');
+    const password2 = document.querySelector('#password2');
+    togglePassword2.addEventListener('click', function () {
+        const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+        password2.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+
+    if (password && password2) {
+        password2.addEventListener("input", function() {
+            if (password.value !== password2.value) {
+                password2.setCustomValidity("Passwords do not match");
+            } else {
+                password2.setCustomValidity("");
+            }
+        });
+    }
+</script>

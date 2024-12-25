@@ -1,3 +1,56 @@
+<style>
+  .greet{
+    text-align: center;
+  }
+
+  .greet h4{
+    color: #ff5d68d3;
+  }
+
+  .btn-search{
+    background-color: #fe424e;
+    border: 1px solid #fe424e !important;
+    border-radius: 50%;
+    height: 100%;
+    height: 3rem;
+    width: 3.6rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+    height: 2rem;
+    width: 2rem;
+    background-color: #fe424e;
+    border-radius: 50%;
+    mask: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"%3E%3Cpath fill="%23ffffff" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"%3E%3C/path%3E%3C/svg%3E') center / contain no-repeat;
+    cursor: pointer;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button:hover {
+    background-color: rgb(255, 0, 0); 
+  }
+
+  .custom-focus:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 37, 37, 0.452);
+    border-color: #fe424e;
+  }
+
+  .search-input{
+    border-radius: 25px;
+    padding: 0.5rem 2.6rem 0.5rem 2.6rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.39); 
+  }
+
+  .btn-search i{
+    color: white;
+  }
+  .btn-search:hover{
+    background-color: #fd1121;
+  }
+
+</style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
@@ -6,19 +59,52 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link" href="/listings">Explore</a>
+          <a class="nav-link" href="/listings" style="font-weight: 550; font-size: 1.1rem;">Explore</a>
         </div>
-        
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Airbnb your home</a>
-          <% if(!currUser){ %>
-            <a class="nav-link"  href="/signup"><b>signup</b></a>
-            <a class="nav-link" href="/login"><b>login</b></a>
-          <% } %>
 
-          <% if(currUser){ %>
-            <a class="nav-link" href="/logout"><b>logout</b></a>
-          <% } %>
+        <div class="navbar-nav ms-auto flex-column">
+          <!-- <div class="greet">
+            <h4>Plan Your Journey Now</h4>
+          </div> -->
+          <div class="container-fluid search-bar">
+            <form class="d-flex searchForm" action="/listings/search" method="get" role="search">
+              <input class="form-control me-2 search-input custom-focus" type="text" name="s" placeholder="Search destinations">
+              <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </div>
+        </div>
+
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="/listings/new" style="font-weight: 550; font-size: 1.1rem;">Airbnb your home</a>
+          &nbsp;
+
+          <div class="btn-group btn-group dropstart">
+            <button type="button" class="btn btn-secondary dropdown-toggle d-flex align-items-center gap-2 bg-white drop-btn" data-bs-toggle="dropdown" aria-expanded="false">
+             
+              <span class="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+
+              <% if (currUser) { %>
+                  <i class="fa-solid fa-user"></i>
+              <% } else { %>
+                  <i class="fa-regular fa-user"></i>
+              <% } %>
+              
+            </button>
+            <ul class="dropdown-menu">
+              <% if(!currUser){ %>
+                <a class="nav-link" href="/signup"><b>signup</b></a>
+                <a class="nav-link" href="/login"><b>login</b></a>
+              <% } %>
+          
+              <% if(currUser){ %>
+                <a class="nav-link" href="/logout"><b>logout</b></a>
+              <% } %>
+            </ul>
+          </div>          
           
         </div>
       </div>

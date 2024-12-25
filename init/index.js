@@ -57,7 +57,7 @@ const initDB = async () => {
                 console.log("Skipping entry due to geocoding failure:", address);
                 continue;
             }
-            obj.owner = "67695ed190e6026ae5195217";
+            obj.owner = "676bdb5532f8f98e8b8014e9";
             obj.geometry = {
                 type: "Point",
                 coordinates: [position.lng, position.lat],

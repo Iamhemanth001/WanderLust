@@ -11,8 +11,18 @@ body{
 
 /* Navbar */
 .navbar{
-    height: 5rem;
     background-color: white;
+    height: 5rem;
+}
+
+.search-bar{
+    margin-left: 4.5rem !important;
+}
+
+@media (max-width: 1000px) {
+    .search-bar{
+        margin-left: 0 !important;
+    }
 }
 
 .fa-compass{
@@ -151,3 +161,80 @@ input[type="number"]::-webkit-outer-spin-button {
     width: 80vh;
     height: 400px;
 }
+
+
+/*nav -2 */
+
+.filtersSection{
+    top: 5rem;
+    z-index: 1 !important;
+}
+
+.searchForm {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.greet {
+    transition: opacity 0.3s ease;
+}
+
+.drop-btn{
+    border-radius: 25px !important;
+    box-shadow: 0px 1px 5px #808080f2 !important;
+    border: none;
+}
+
+.hamburger-menu {
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    position: relative;
+    margin-right: 0.5rem;
+}
+  
+  .hamburger-menu span {
+    display: block;
+    background-color: #000;
+    height: 2px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .hamburger-menu span:nth-child(1) {
+    top: 0;
+  }
+  
+  .hamburger-menu span:nth-child(2) {
+    top: 8px;
+  }
+  
+  .hamburger-menu span:nth-child(3) {
+    top: 16px;
+  }
+  
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-secondary i {
+    font-size: 1.5rem;
+    color: black;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e0e0e0; /* Slightly darker gray on hover */
+  }
+  
+
+  .btn-group .dropdown-menu {
+    z-index: 1050; /* Ensure dropdown is above other elements */
+  }
