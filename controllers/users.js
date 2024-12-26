@@ -2,28 +2,32 @@ const User = require("../models/user");
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-module.exports.renderSignUpForm = (req,res) => {
+module.exports.renderSignUpForm = (req, res) => {
     res.render("users/signup.ejs");
 };
 
-module.exports.signUp = async (req,res,next) => {
-    try{
-        let {username,email,password} = req.body;
-        const newUser = new User({email,username});
-        const registeredUser = await User.register(newUser,password);
-        // console.log(registeredUser);
+module.exports.signUp = async (req, res, next) => {
+    try {
+        let { username, email, password } = req.body;
+        const newUser = new User({ email, username });
 
-        req.login(registeredUser,(err) => {
-            if(err){
-                return next(err);
-            }else{
-                req.flash("success",`Welcome ${registeredUser.username} on WanderLust you are loged in`);
-                res.redirect("/listings");
+        // Register the new user
+        const registeredUser = await User.register(newUser, password);
+
+        // Log the user in after successful registration
+        req.login(registeredUser, (err) => {
+            if (err) {
+                return next(err); // If there's an error in login, pass to error handler
             }
+            // Flash a success message
+            req.flash("success", `Welcome ${registeredUser.username} to WanderLust!`);
+            return res.redirect("/listings"); // Redirect to listings page
         });
-    }catch(e){
-        req.flash("error",e.message);
-        res.redirect("/signup");
+
+    } catch (e) {
+        // Handle error during signup
+        req.flash("error", e.message);
+        return res.redirect("/signup"); // Redirect to signup page if there's an error
     }
 };
 
@@ -32,19 +36,23 @@ module.exports.renderLoginForm = (req, res) => {
 };
 
 module.exports.login = (req, res) => {
-    req.flash("success", "Welcome back!");
-    const redirectUrl = req.session.returnTo || "/listings";
-    delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    // Flash a success message after a successful login
+    req.flash("success", `Welcome back, ${req.user.username}!`);
+
+    // Redirect the user to the appropriate page
+    const redirectUrl = req.session.returnTo || "/listings"; // Check for the returnTo session or default to listings
+    delete req.session.returnTo; // Clean up the returnTo session variable
+    return res.redirect(redirectUrl); // Redirect the user
 };
 
 module.exports.logout = (req, res, next) => {
     req.logout((err) => {
         if (err) {
-            return next(err);
+            return next(err); // Handle error during logout
         }
+        // Flash a goodbye message
         req.flash("success", "Goodbye!");
-        res.redirect("/listings");
+        return res.redirect("/listings"); // Redirect to listings after logout
     });
 };
 
@@ -73,9 +81,6 @@ module.exports.handleForgotPassword = async (req, res) => {
         }
     });
 
-    // console.log('GMAIL_USER:', process.env.GMAIL_USER);
-    // console.log('GMAIL_PASS:', process.env.GMAIL_PASS);
-
     const mailOptions = {
         to: user.email,
         from: process.env.GMAIL_USER,
@@ -93,12 +98,12 @@ If you need assistance or have any concerns, feel free to contact our support te
 
 Best regards,  
 WanderLust Private Limited`  
-};
+    };
 
     await transporter.sendMail(mailOptions);
 
     req.flash('success', `An e-mail has been sent to ${user.email} with further instructions.`);
-    res.redirect('/forgot-password');
+    return res.redirect('/forgot-password');
 };
 
 module.exports.renderResetPasswordForm = async (req, res) => {
@@ -134,11 +139,11 @@ module.exports.handleResetPassword = async (req, res) => {
                     return res.redirect('/forgot-password');
                 }
                 req.flash('success', 'Your password has been changed.');
-                res.redirect('/listings');
+                return res.redirect('/listings');
             });
         });
     } else {
         req.flash('error', 'Passwords do not match.');
-        res.redirect(`/reset-password/${token}`);
+        return res.redirect(`/reset-password/${token}`);
     }
 };

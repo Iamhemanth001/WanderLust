@@ -30,6 +30,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get('/google/callback', 
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
+        req.flash("success",`Welcome ${req.user.username} on WanderLust you are loged in`);
         res.redirect('/listings');
 });
 

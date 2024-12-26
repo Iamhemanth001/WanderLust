@@ -1,34 +1,39 @@
 <% layout("/layouts/boilerplate") %>
 
 <div class="row">
-    <div class="col-8  offset-2 mt-3">
-        <h3>Create a New Listing</h3>
+    <div class="col-8 offset-2 mt-3">
+        <h3>Edit Listing: <%= listing.title %></h3>
         
-        <form method="POST" action="/listings/<%=listing._id%>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
+            
+            <!-- Title -->
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required> 
                 <div class="valid-feedback">That's look Good!</div>              
             </div>
             
+            <!-- Description -->
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
                 <div class="invalid-feedback">Please enter a short description</div>              
             </div>
             
+            <!-- Original Image -->
             <div class="mb-3">
-                original Image <br>
-                <img src="<%= originalImgUrl %>" alt="listing-image">
+                <label for="originalImage" class="form-label">Original Image</label><br>
+                <img src="<%= originalImgUrl %>" alt="listing-image" class="img-fluid" style="max-width: 200px;">
             </div>
             
+            <!-- Upload new Image -->
             <label class="form-label">Upload new Image</label>
             <div class="input-group mb-3"> 
                 <input type="file" name="listing[image]" class="form-control" id="inputGroupFile02">
                 <label class="input-group-text" for="inputGroupFile02">Upload</label>
             </div>            
           
-    
+            <!-- Price and Country -->
             <div class="row">
                 <div class="mb-3 col-md-4">
                     <label for="price" class="form-label">Price</label>
@@ -43,34 +48,35 @@
                 </div>
             </div>
             
+            <!-- Category and Location -->
             <div class="row">
                 <div class="mb-3 col-md-4">
                     <label for="category" class="form-label">Category</label>
                     <select name="listing[category]" class="form-select" required>
                         <option value="">Select a category</option>
-                        <option value="Trending">Trending</option>
-                        <option value="Rooms">Rooms</option>
-                        <option value="Iconic Cities">Iconic Cities</option>
-                        <option value="Mountains">Mountains</option>
-                        <option value="Castles">Castles</option>
-                        <option value="Amazing Pools">Amazing Pools</option>
-                        <option value="Camping">Camping</option>
-                        <option value="Farms">Farms</option>
-                        <option value="Arctic">Arctic</option>
+                        <option value="Trending" <%= listing.category === 'Trending' ? 'selected' : '' %>>Trending</option>
+                        <option value="Rooms" <%= listing.category === 'Rooms' ? 'selected' : '' %>>Rooms</option>
+                        <option value="Iconic Cities" <%= listing.category === 'Iconic Cities' ? 'selected' : '' %>>Iconic Cities</option>
+                        <option value="Mountains" <%= listing.category === 'Mountains' ? 'selected' : '' %>>Mountains</option>
+                        <option value="Castles" <%= listing.category === 'Castles' ? 'selected' : '' %>>Castles</option>
+                        <option value="Amazing Pools" <%= listing.category === 'Amazing Pools' ? 'selected' : '' %>>Amazing Pools</option>
+                        <option value="Camping" <%= listing.category === 'Camping' ? 'selected' : '' %>>Camping</option>
+                        <option value="Farms" <%= listing.category === 'Farms' ? 'selected' : '' %>>Farms</option>
+                        <option value="Arctic" <%= listing.category === 'Arctic' ? 'selected' : '' %>>Arctic</option>
                     </select>
-                 <div class="invalid-feedback">Please select a category</div>
+                    <div class="invalid-feedback">Please select a category</div>
                 </div>
     
                 <div class="mb-3 col-md-8">
                     <label for="location" class="form-label">Location</label>
-                    <input name="listing[location]" value="<%= listing.location %>"type="text" class="form-control" required> 
+                    <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control" required> 
                     <div class="invalid-feedback">Location should be valid</div>              
                 </div>        
             </div>
             
-            <button class="btn edit-btn mt-3">Edit</button>
+            <!-- Submit Button -->
+            <button class="btn edit-btn mt-3">Edit Listing</button>
             <br><br>
         </form>
     </div>
 </div>
-

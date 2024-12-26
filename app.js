@@ -21,7 +21,15 @@ const userRouter = require("./routes/user");
 const ExpressError = require('./utils/ExpressError');
 require('./config/passport');
 
+const cors = require('cors');
+app.use(cors({
+    origin: 'http://localhost:8000', // Allow local requests
+    credentials: true
+}));
+
+
 const port = 8000;
+// const MONGO_URL = "mongodb://localhost:27017/wanderlust";
 const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connect(MONGO_URL);
@@ -37,7 +45,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const store = MongoStore.create({
     mongoUrl: MONGO_URL,
     crypto: {
-        secret: "HushHushHurHur",
+        secret: process.env.SECRET,
     },
     touchAfter: 24 * 3600
 });
@@ -48,13 +56,14 @@ store.on("error", function (e) {
 
 const sessionOptions = {
     store,
-    secret: "HushHushHurHur",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,  // 1 week
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        secure: process.env.NODE_ENV === "production"
     }
 };
 
