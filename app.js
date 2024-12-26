@@ -58,12 +58,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// CORS Configuration
-app.use(cors({
-    origin: 'https://wanderlust-dp36.onrender.com', // Adjust as needed for your environment
-    credentials: true
-}));
-
 // Session Store
 const store = MongoStore.create({
     mongoUrl: MONGO_URL,
@@ -128,4 +122,9 @@ app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = "Something went wrong";
     res.status(statusCode).render("listings/error.ejs", { err });
+});
+
+app.use((req, res, next) => {
+    console.log("Session:", req.session);
+    next();
 });
