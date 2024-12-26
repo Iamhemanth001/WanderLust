@@ -18,6 +18,7 @@ module.exports.signUp = async (req, res, next) => {
         // Log the user in after successful registration
         req.login(registeredUser, (err) => {
             if (err) {
+                console.error("Login error:", err);
                 return next(err); // If there's an error in login, pass to error handler
             }
             // Flash a success message
@@ -26,6 +27,7 @@ module.exports.signUp = async (req, res, next) => {
         });
 
     } catch (e) {
+        console.error("SignUp error:", e);
         // Handle error during signup
         req.flash("error", e.message);
         return res.redirect("/signup"); // Redirect to signup page if there's an error
