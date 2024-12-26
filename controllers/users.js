@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const passport = require('passport');
 
 module.exports.renderSignUpForm = (req, res) => {
     res.render("users/signup.ejs");
@@ -85,7 +86,7 @@ module.exports.handleForgotPassword = async (req, res) => {
         to: user.email,
         from: process.env.GMAIL_USER,
         subject: 'Password Reset',
-        text: `Dear ${user.name || 'User'},  
+        text: `Dear ${user.username || 'User'},  
 
 You are receiving this because you (or someone else) requested a password reset for your account.  
 

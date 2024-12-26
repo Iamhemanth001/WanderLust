@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // CORS Configuration
 app.use(cors({
-    origin: 'http://localhost:8000', // Adjust as needed for your environment
+    origin: 'https://wanderlust-dp36.onrender.com', // Adjust as needed for your environment
     credentials: true
 }));
 
