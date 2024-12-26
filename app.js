@@ -114,6 +114,10 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-app.listen(port, () => {
-    console.log(`Serving on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Serving running on port ${port}`);
 });
+
+// Increase keep-alive and headers timeout
+server.keepAliveTimeout = 120000; // 2 minutes
+server.headersTimeout = 120000;  // 2 minutes
