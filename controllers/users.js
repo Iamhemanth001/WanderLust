@@ -1,59 +1,55 @@
 const User = require("../models/user");
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const passport = require('passport');
 
-module.exports.renderSignUpForm = (req, res) => {
+
+module.exports.rendersignupForm = (req, res) => { 
     res.render("users/signup.ejs");
 };
 
-module.exports.signUp = async (req, res, next) => {
-    try {
-        let { username, email, password } = req.body;
-        const newUser = new User({ email, username });
-
-        // Register the new user
+module.exports.signup = async (req, res) => {   
+    try{
+        let {username, email, password} = req.body;
+        const newUser = new User({email, username});
         const registeredUser = await User.register(newUser, password);
+        console.log(registeredUser);
 
-        // Log the user in after successful registration
+     
         req.login(registeredUser, (err) => {
-            if (err) {
-                console.error("Login error:", err); // Log the error
-                return next(err); // Pass error to global handler (no further code execution)
-            }
-
-            // Flash a success message
-            req.flash("success", `Welcome ${registeredUser.username} to WanderLust!`);
-            return res.redirect("/listings"); // Ensure redirect happens only once
+        if(err) {
+          return next(err);
+        }
+          req.flash("success", "Welcome to Wanderlust");
+          res.redirect("/listings");
         });
-    } catch (e) {
-        console.error("SignUp error:", e); // Log the error for debugging
-        req.flash("error", e.message);
-        return res.redirect("/signup"); // Redirect only if no response is sent already
-    }
+        }  catch(e) {
+         req.flash("error",e.message);
+         res.redirect("/signup");
+    }  
 };
 
-
-module.exports.renderLoginForm = (req, res) => {
+module.exports.renderLoginForm = (req, res) => { 
     res.render("users/login.ejs");
 };
 
-module.exports.login = async (req, res, next) => {
-    req.flash("success", `Welcome back ${req.user.username}! You are logged in.`);
-    const redirectUrl = req.session.returnTo || "/listings";
-    res.redirect(redirectUrl);    
+module.exports.login =  async (req, res) => {
+    req.flash("success","Welcome to WanderLust!! You are logged in");
+
+    
+    let redirectUrl = res.locals.redirectUrl || "/listings";
+    res.redirect(redirectUrl);
 };
 
 module.exports.logout = (req, res, next) => {
     req.logout((err) => {
-        if (err) {
-            return next(err); // Handle error during logout
+        if(err) {
+           return next(err);
         }
-        // Flash a goodbye message
-        req.flash("success", "Goodbye!");
-        return res.redirect("/listings"); // Redirect to listings after logout
+        req.flash("success", "you are logged out now");
+        res.redirect("/listings");
     });
 };
+// ---------------------------------------------------------------------------------------------------------------
 
 module.exports.renderForgotPasswordForm = (req, res) => {
     res.render("users/forgot-password.ejs");
