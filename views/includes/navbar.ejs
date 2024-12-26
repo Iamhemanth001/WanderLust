@@ -140,9 +140,13 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ms-auto navbar-toggler-body">
         <a class="nav-link" href="/listings/new" style="font-weight: 550; font-size: 1.1rem;">Airbnb your home</a>
+          <% if (!currUser) { %>
           <a class="nav-link" href="/signup"><b>signup</b></a>
           <a class="nav-link" href="/login"><b>login</b></a>
+          <% } %>
+          <% if (currUser) { %>
           <a class="nav-link" href="/logout"><b>logout</b></a>
+          <% } %>
       </div>
       </div>
     </div>
