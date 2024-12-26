@@ -1,7 +1,7 @@
-// setTimeout(() => {
-//     const alert = document.querySelector('.alert');
-//     if (alert) alert.remove();
-// }, 2000);
+setTimeout(() => {
+    const alert = document.querySelector('.alert');
+    if (alert) alert.remove();
+}, 2000);
 
 
 document.addEventListener("scroll", () => {
