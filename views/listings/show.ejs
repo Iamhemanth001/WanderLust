@@ -36,6 +36,14 @@
             width: 96%;
         }
 }
+
+@media screen and (max-width: 500px){
+    .cus-review-card {
+        font-size: 12px;
+        width: 48%;
+        margin-left: 6px !important;
+    }
+}
 </style>
 
 <script>
@@ -121,7 +129,7 @@
             
             <div class="row">
                 <% for(review of listing.reviews){ %>
-                    <div class="card col-5 ms-4 mb-3">
+                    <div class="card col-5 ms-4 mb-3 cus-review-card">
                         <div class="card-body mt-2">
                             <h5 class="card-title">@<%=review.author.username%></h5>
                             <p class="starability-result card-title" data-rating="<%=review.rating%>">Rated: </p>

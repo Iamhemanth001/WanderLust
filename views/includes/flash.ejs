@@ -1,3 +1,17 @@
+<style>
+    @media (max-width: 600px) {
+        .cus-alert{
+            margin-left: 4% !important;
+            width: 98% !important;
+            font-size: 12px !important;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: center;
+            top: 3rem;
+        }
+    }
+</style>
+
 <% if(success && success.length){ %>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -5,7 +19,7 @@
     </symbol>
 </svg>
 
-<div class="alert alert-success col-6 offset-3 mt-3 alert-dismissible fade show floating-alert show" role="alert" style="position: absolute;top: 5rem;left: 0rem;">
+<div class="alert alert-success col-6 offset-3 mt-3 cus-alert alert-dismissible fade show floating-alert show" role="alert" style="position: absolute;top: 5rem;left: 0rem;">
     <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"  width="20" height="20"><use xlink:href="#check-circle-fill"/></svg>
     <%=success%>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -19,7 +33,7 @@
         </symbol>
     </svg>
 
-    <div class="alert alert-danger col-6 offset-3 mt-3 alert-dismissible fade show floating-alert show" role="alert" style="position: absolute;top: 5rem;left: 0rem;">
+    <div class="alert alert-danger col-6 offset-3 mt-3 cus-alert alert-dismissible fade show floating-alert show" role="alert" style="position: absolute;top: 5rem;left: 0rem;">
         <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Error:" width="20" height="20">
             <use xlink:href="#exclamation-triangle-fill"/>
         </svg>
