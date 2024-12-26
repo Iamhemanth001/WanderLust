@@ -13,6 +13,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const cors = require("cors");
+const http = require('http'); // Required for server
 
 const User = require("./models/user");
 const authRoutes = require('./routes/auth'); 
@@ -29,8 +30,24 @@ const MONGO_URL = process.env.MONGO_URL;
 
 // MongoDB Connection
 mongoose.connect(MONGO_URL)
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+    .then(() => {
+        console.log("Connected to MongoDB");
+
+        // Create server and set timeouts
+        const server = http.createServer(app);
+
+        // Increase keep-alive and headers timeout
+        server.keepAliveTimeout = 120000; // 2 minutes
+        server.headersTimeout = 120000;   // 2 minutes
+
+        // Start server
+        server.listen(port, '0.0.0.0', () => {
+            console.log(`Server running on port ${port}`);
+        });
+    })
+    .catch((err) => {
+        console.error("MongoDB connection error:", err);
+    });
 
 // View Engine and Middleware
 app.engine("ejs", ejsMate);
@@ -112,12 +129,3 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = "Something went wrong";
     res.status(statusCode).render("listings/error.ejs", { err });
 });
-
-// Start Server
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Serving running on port ${port}`);
-});
-
-// Increase keep-alive and headers timeout
-server.keepAliveTimeout = 120000; // 2 minutes
-server.headersTimeout = 120000;  // 2 minutes
