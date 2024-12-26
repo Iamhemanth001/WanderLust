@@ -18,7 +18,14 @@ router.route("/login")
             failureRedirect: '/login',
             failureFlash: true
         }),
-        wrapAsync(userController.login)
+        (req, res, next) => {
+            // If passport authentication failed, stop here
+            if (!req.user) {
+                return; // Ensures no further code is executed if authentication fails
+            }
+            // If authentication succeeded, continue to the login logic
+            return wrapAsync(userController.login)(req, res, next);
+        }
     );
 
 router.get("/logout", userController.logout);
