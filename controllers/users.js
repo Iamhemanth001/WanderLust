@@ -48,7 +48,7 @@ module.exports.login = async (req, res) => {
         delete req.session.returnTo; // Clean up the returnTo session variable
         return res.redirect(redirectUrl); // Redirect the user
     }catch(err){
-        next(err);
+        return next(err);
     }
 
 };

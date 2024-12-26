@@ -10,25 +10,16 @@ router.route("/signup")
     .get(userController.renderSignUpForm)
     .post(wrapAsync(userController.signUp));
 
-    router.route("/login")
-    .get(userController.renderLoginForm)
-    .post(
-        saveRedirectUrl,
-        passport.authenticate("local", {
-            failureRedirect: '/login',
-            failureFlash: true
-        }),
-        async (req, res, next) => {
-            try {
-                // If authentication was successful, execute login
-                if (req.user) {
-                    await userController.login(req, res, next); // Directly call login
-                }
-            } catch (err) {
-                return next(err); // Pass errors to the next middleware
-            }
-        }
-    );
+router.route("/login")
+.get(userController.renderLoginForm)
+.post(
+    saveRedirectUrl,
+    passport.authenticate("local", {
+        failureRedirect: '/login',
+        failureFlash: true
+    }),
+    userController.login // After successful authentication, call the login handler
+);
 
 
 router.get("/logout", userController.logout);
