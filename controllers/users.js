@@ -38,19 +38,11 @@ module.exports.renderLoginForm = (req, res) => {
     res.render("users/login.ejs");
 };
 
-module.exports.login = async (req, res) => {
-    // Flash a success message after a successful login
-    try{
-        console.log('Login successful, redirecting...');
-        req.flash("success", `Welcome back, ${req.user.username}!`);
-
-        const redirectUrl = req.session.returnTo || "/listings"; // Check for the returnTo session or default to listings
-        delete req.session.returnTo; 
-        return res.redirect(redirectUrl); 
-    }catch(err){
-        return next(err);
-    }
-
+module.exports.login = (req, res) => {
+    req.flash("success", "Welcome back!");
+    const redirectUrl = req.session.returnTo || "/listings";
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
 };
 
 module.exports.logout = (req, res, next) => {
