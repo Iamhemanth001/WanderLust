@@ -18,7 +18,10 @@ router.route("/login")
         failureRedirect: '/login',
         failureFlash: true
     }),
-    userController.login // After successful authentication, call the login handler
+    (req, res) => {
+        console.log('User after authentication:', req.user); // Log req.user here to check if it's set
+        userController.login(req, res); // Proceed to login if successful
+    }
 );
 
 

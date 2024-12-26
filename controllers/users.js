@@ -43,10 +43,10 @@ module.exports.login = async (req, res) => {
     try{
         console.log('Login successful, redirecting...');
         req.flash("success", `Welcome back, ${req.user.username}!`);
-        // Redirect the user to the appropriate page
+
         const redirectUrl = req.session.returnTo || "/listings"; // Check for the returnTo session or default to listings
-        delete req.session.returnTo; // Clean up the returnTo session variable
-        return res.redirect(redirectUrl); // Redirect the user
+        delete req.session.returnTo; 
+        return res.redirect(redirectUrl); 
     }catch(err){
         return next(err);
     }
