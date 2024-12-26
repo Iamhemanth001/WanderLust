@@ -1,15 +1,54 @@
 <% layout("/layouts/boilerplate") %>
+
+<style>
+
+.separator {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    .separator::before,
+    .separator::after {
+        content: "";
+        flex: 1;
+        border-top: 1px solid #ccc;
+    }
+    .separator span {
+        margin: 0 10px;
+        font-size: 0.9rem;
+    }
+
+    .cus-card,.cus-title{    
+        margin-left: 21%;
+    }
+    
+@media screen and (max-width: 770px){
+        .cus-card,.cus-st,.cus-title{
+            width: 96%;
+            margin: auto !important;
+        }
+
+        .show-img{
+            height: 40vh;
+        }
+        .cus-map{
+            margin: auto !important;
+            width: 96%;
+        }
+}
+</style>
+
 <script>
     let mapApi = "<%= process.env.MAP_API %>";
     let coordinates = <%= JSON.stringify(listing.geometry.coordinates) %>;
 </script>
 
 <div class="row mt-3 mb-4">
-    <div class="col-8 offset-3">
+    <div class="col-8 offset-3 cus-title">
         <h3><b><%= listing.title %></b></h3>
     </div>
 
-    <div class="col-6 offset-3">
+    <div class="col-7 cus-card">
         
         <div class="card show-card listing-card">
             <img src="<%=listing.image.url%>" class="card-img-top show-img" alt="listing-image">
@@ -23,7 +62,6 @@
                 </p> 
             </div>
         </div>
-        <hr>
     </div>
 
     <% if(currUser && currUser._id.equals(listing.owner._id)){ %>
@@ -38,14 +76,16 @@
     <% } %>
 
     
-    <div class="col-6 offset-3 mb-3">
+    <div class="col-7 mb-3 cus-st" style="margin-left: 21%;">
         <% if(currUser){ %>
-            <h4 class="mt-3">Leave a Review</h4>
+            <div class="separator">
+                <span><h3 class="mt-1">Leave a Review</h3></span>
+            </div>
             
             <form action="/listings/<%=listing.id%>/reviews" method="post" novalidate class="needs-validation">
             
                 <div class="mt-3">
-                    <label for="rating" class="form-label">Rating</label>
+                    <label for="rating" class="form-label mb-3"><h5>Rating</h5></label>
                     <fieldset class="starability-slot">
                         <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating."/>
                         <input type="radio" id="first-rate1" name="review[rating]" value="1" />
@@ -62,7 +102,7 @@
                 </div>
                   
                 <div class="mb-3">
-                    <label for="comment" class="form-label">Comments</label>
+                    <label for="comment" class="form-label"><h5>Comments</h5></label>
                     <div class="form-floating">
                         <textarea name="review[comment]" class="form-control custom-comment" style="resize: none;" required></textarea>
                     </div>
@@ -75,7 +115,9 @@
         <% } %>
 
         <%if(listing.reviews.length > 0){%>
-            <p><b>All Reviews</b></p>
+            <div class="separator mt-4">
+                <span><h3 class="mt-1">All Reviews</h3></span>
+            </div>
             
             <div class="row">
                 <% for(review of listing.reviews){ %>
@@ -96,8 +138,12 @@
         <%}%>
     </div>
 
-    <div class="col-6 offset-3 mb-3">
-        <h3>Where you'll be</h3>
+    <div class="col-7 mb-3 cus-map" style="margin-left: 21%;">
+        
+        <div class="separator mt-4">
+            <span><h3>Where you'll be</h3></span>
+        </div>
+
         <div id="map" style="width: 100%; height: 500px;"></div>
     </div>
 </div>

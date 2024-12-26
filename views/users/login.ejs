@@ -39,35 +39,47 @@
     color: #495057;
 }
 
-    .separator {
-        display: flex;
-        align-items: center;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    .separator::before,
-    .separator::after {
-        content: "";
-        flex: 1;
-        border-top: 1px solid #ccc;
-    }
-    .separator span {
-        margin: 0 10px;
-        color: #6c757d;
-        font-size: 0.9rem;
+.separator {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid #ccc;
+}
+.separator span {
+    margin: 0 10px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.custom-card {
+    box-shadow: 1px 3px 7px 5px #808080f7;
+    width: 70vh;
+    margin: auto;
+    border-radius: 20px;
+    padding: 20px;
+    height: auto;
+}
+
+
+@media (max-width: 500px) {
+    .custom-card{
+        margin-left: 1.75rem;
+        width: 85%;
     }
 
-    .custom-card {
-        box-shadow: 1px 3px 7px 5px #808080f7;
-        width: 70vh;
-        margin: auto;
-        border-radius: 20px;
-        padding: 20px;
-        height: auto;
+    .custom-card h2{
+        font-size: 1.25rem;
     }
+}
 </style>
 
-<div class="row mt-3 mb-3">
+<div class="row mt-3 mb-4">
     <div class="custom-card">
 
         <h2 class="mb-4 text-center">Welcome back! Glad to see you, Again!</h2>
@@ -91,7 +103,7 @@
                     <div class="invalid-feedback">Please enter password</div>              
                 </div>
                 
-                <div class="mb-4">
+                <div class="mb-3">
                     <p class="text-end">
                         <a href="/forgot-password" class="text-decoration-none text-black">Forgot Password?</a>
                     </p>
@@ -100,12 +112,12 @@
                 <button class="btn btn-success" style="width: 100%;">Login</button>
             </form>
             
-            <div class="separator mt-5">
+            <div class="separator mt-4">
                 <span>Or Login with</span>
             </div>
             
             <div class="mt-4 text-center">
-                <a href="/auth/google" class="btn btn-primary">
+                <a href="/auth/google" class="btn btn-outline-success">
                     <i class="fab fa-google"></i> Login with Google
                 </a>
             </div>

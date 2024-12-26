@@ -2,6 +2,7 @@ body{
     font-family: "Plus Jakarta Sans", serif !important;
     display: flex;
     flex-direction: column;
+    background: #00000003;
     min-height: 100vh;
 }
 
@@ -63,7 +64,7 @@ body{
     flex-wrap: wrap;
     justify-content: center;
     align-items: space-evenly;
-    background-color: #ebebeb;
+    /* background-color: #ebebeb; */
     text-align: center;
 }
 
@@ -119,8 +120,10 @@ body{
 /* Show page */
 
 .show-img{
-    height: 40Vh;
+    height: 50vh;
+    box-shadow: 0px 0px 5px 4px gray;
 }
+
 
 .btns{
     display: flex;
@@ -238,3 +241,17 @@ input[type="number"]::-webkit-outer-spin-button {
   .btn-group .dropdown-menu {
     z-index: 1050; /* Ensure dropdown is above other elements */
   }
+
+  @media (max-width: 585px) {
+    .filter-col {
+        display: none; /* Hide the filter section */
+    }
+
+    .tax-toggle {
+        width: 100%; /* Make the toggle button span the full width */
+        margin-left: 0; /* Center the button */
+        margin-top: 1rem; /* Add spacing above */
+        display: flex; /* Ensure the toggle button is visible */
+        justify-content: center; /* Center-align the toggle button */
+    }
+}

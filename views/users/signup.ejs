@@ -64,6 +64,17 @@
     padding: 20px;
     height: auto;
 }
+
+@media (max-width: 500px) {
+    .custom-card{
+        margin-left: 1.75rem;
+        width: 85%;
+    }
+
+    .custom-card h1{
+        font-size: 1.5rem;
+    }
+}
 </style>
 
 
@@ -113,8 +124,8 @@
                 <div class="separator mt-4">
                     <span>Or sign up with</span>
                 </div>
-                <button type="button" class="btn btn-outline-danger" id="googleSignUp" onclick="window.location.href='/auth/google'">
-                    <i class="fa fa-google"></i> Sign up with Google
+                <button type="button" class="btn btn-outline-success" id="googleSignUp" onclick="window.location.href='/auth/google'">
+                    <i class="fab fa-google"></i> Sign up with Google
                 </button>
             </div>
         </form>

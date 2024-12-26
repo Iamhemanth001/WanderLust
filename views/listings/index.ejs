@@ -63,7 +63,7 @@
         }
 
         .tax-toggle {
-            border: 0.5px solid black;
+            box-shadow: 1px 1px 6px 0px gray;
             border-radius: 1rem;
             height: 3rem;
             width: 17rem;
@@ -136,13 +136,26 @@
         }
     }
 
-
-@media (max-width: 576px) {
+@media (max-width: 585px) {
     #filters {
-        flex-direction: column;
+        padding: 0.5rem;
+    }
+    
+    .filter-col {
+        width: 98%;
+    }
+
+    .tax-toggle {
+        width: 93%;
+        margin-left: 1rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .lists {
+        margin-top: 4px !important;
     }
 }
-
     </style>
 
 <div class="row align-items-center sticky-top bg-body-light border-bottom bg-white filtersSection" style="top: 5rem">
@@ -231,7 +244,7 @@
 </div>
 
     
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3 lists">
         <% for(let listing of allListings){ %>
             <a href="/listings/<%=listing._id%>" class="listing-link">
                 <div class="card col listing-card">

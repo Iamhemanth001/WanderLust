@@ -8,6 +8,7 @@ const path = require("path");
 const methodoverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -21,7 +22,7 @@ const ExpressError = require('./utils/ExpressError');
 require('./config/passport');
 
 const port = 8000;
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connect(MONGO_URL);
 
@@ -33,8 +34,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodoverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+const store = MongoStore.create({
+    mongoUrl: MONGO_URL,
+    crypto: {
+        secret: "HushHushHurHur",
+    },
+    touchAfter: 24 * 3600
+});
+
+store.on("error", function (e) {
+    console.log("Session Store Error", e);
+});
+
 const sessionOptions = {
-    secret: "mySecretCode",
+    store,
+    secret: "HushHushHurHur",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -43,6 +57,8 @@ const sessionOptions = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 };
+
+
 app.use(session(sessionOptions));
 app.use(flash());
 

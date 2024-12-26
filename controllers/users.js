@@ -80,11 +80,20 @@ module.exports.handleForgotPassword = async (req, res) => {
         to: user.email,
         from: process.env.GMAIL_USER,
         subject: 'Password Reset',
-        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
-        Please click on the following link, or paste this into your browser to complete the process:\n\n
-        http://${req.headers.host}/reset-password/${token}\n\n
-        If you did not request this, please ignore this email and your password will remain unchanged.\n`
-    };
+        text: `Dear ${user.name || 'User'},  
+
+You are receiving this because you (or someone else) requested a password reset for your account.  
+
+To reset your password, please click the link below or paste it into your browser:  
+${req.protocol}://${req.headers.host}/reset-password/${token}  
+
+If you did not make this request, please ignore this email. Your password will remain unchanged.  
+
+If you need assistance or have any concerns, feel free to contact our support team at Wanderlust339@gmail.com.  
+
+Best regards,  
+WanderLust Private Limited`  
+};
 
     await transporter.sendMail(mailOptions);
 
