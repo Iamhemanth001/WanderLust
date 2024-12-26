@@ -10,7 +10,7 @@ router.route("/signup")
     .get(userController.renderSignUpForm)
     .post(wrapAsync(userController.signUp));
 
-router.route("/login")
+    router.route("/login")
     .get(userController.renderLoginForm)
     .post(
         saveRedirectUrl,
@@ -20,17 +20,16 @@ router.route("/login")
         }),
         async (req, res, next) => {
             try {
-                // If authentication failed, Passport already handled the redirect
-                if (!req.user) {
-                    return; // Do nothing further if authentication failed
+                // If authentication was successful, execute login
+                if (req.user) {
+                    await userController.login(req, res, next); // Directly call login
                 }
-                // Proceed with login if authentication was successful
-                await wrapAsync(userController.login)(req, res, next);
             } catch (err) {
                 return next(err); // Pass errors to the next middleware
             }
         }
-);
+    );
+
 
 router.get("/logout", userController.logout);
 

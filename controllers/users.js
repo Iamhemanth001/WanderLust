@@ -18,34 +18,39 @@ module.exports.signUp = async (req, res, next) => {
         // Log the user in after successful registration
         req.login(registeredUser, (err) => {
             if (err) {
-                console.error("Login error:", err);
-                return next(err); // If there's an error in login, pass to error handler
+                console.error("Login error:", err); // Log the error
+                return next(err); // Pass error to global handler (no further code execution)
             }
+
             // Flash a success message
             req.flash("success", `Welcome ${registeredUser.username} to WanderLust!`);
-            return res.redirect("/listings"); // Redirect to listings page
+            return res.redirect("/listings"); // Ensure redirect happens only once
         });
-
     } catch (e) {
-        console.error("SignUp error:", e);
-        // Handle error during signup
+        console.error("SignUp error:", e); // Log the error for debugging
         req.flash("error", e.message);
-        return res.redirect("/signup"); // Redirect to signup page if there's an error
+        return res.redirect("/signup"); // Redirect only if no response is sent already
     }
 };
+
 
 module.exports.renderLoginForm = (req, res) => {
     res.render("users/login.ejs");
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
     // Flash a success message after a successful login
-    req.flash("success", `Welcome back, ${req.user.username}!`);
+    try{
+        console.log('Login successful, redirecting...');
+        req.flash("success", `Welcome back, ${req.user.username}!`);
+        // Redirect the user to the appropriate page
+        const redirectUrl = req.session.returnTo || "/listings"; // Check for the returnTo session or default to listings
+        delete req.session.returnTo; // Clean up the returnTo session variable
+        return res.redirect(redirectUrl); // Redirect the user
+    }catch(err){
+        next(err);
+    }
 
-    // Redirect the user to the appropriate page
-    const redirectUrl = req.session.returnTo || "/listings"; // Check for the returnTo session or default to listings
-    delete req.session.returnTo; // Clean up the returnTo session variable
-    return res.redirect(redirectUrl); // Redirect the user
 };
 
 module.exports.logout = (req, res, next) => {

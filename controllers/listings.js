@@ -1,33 +1,35 @@
 const Listing = require("../models/listing");
 
 module.exports.index = async (req, res) => {
-    const { category } = req.query;
-    let filter = {};
-    
-    if (category) {
-        if (category === "MyListings" && req.user) {
-            filter.owner = req.user._id;
-        } else if (category === "MyListings" && !req.user) {
-            req.flash("error", "You need to be logged in to view your listings.");
-            return res.redirect("/login");
-        } else {
-            filter.category = category;
+    try {
+        const { category } = req.query;
+        let filter = {};
+
+        if (category) {
+            if (category === "MyListings" && req.user) {
+                filter.owner = req.user._id;
+            } else if (category === "MyListings" && !req.user) {
+                req.flash("error", "You need to be logged in to view your listings.");
+                return res.redirect("/login");
+            } else {
+                filter.category = category;
+            }
         }
+
+        const allListings = await Listing.find(filter);
+        if (allListings.length === 0) {
+            req.flash("error", "No listings available in this category.");
+            return res.redirect("/listings");
+        }
+        res.render("listings/index.ejs", { allListings });
+    } catch (error) {
+        console.error(error);
+        req.flash("error", "Something went wrong. Please try again later.");
+        res.redirect("/listings");
     }
-
-    const allListings = await Listing.find(filter);
-
-    if (allListings.length === 0) {
-        req.flash("error", "No listings available in this category.");
-        return res.redirect("/listings");
-    }
-
-    res.render("listings/index.ejs", { allListings });
 };
 
-
-module.exports.renderNewForm = (req,res)=>{
-    // console.log(req.user);
+module.exports.renderNewForm = (req, res) => {
     res.render("listings/new.ejs");
 };
 
