@@ -14,7 +14,7 @@ const mapContainer = document.getElementById("map");
 if (mapContainer) {
     const map = new H.Map(
         mapContainer,
-        defaultLayers.vector.normal.map,
+        defaultLayers.raster.normal.map,
         {
             zoom: 12,
             center: { lat: coordinates[1], lng: coordinates[0] }
