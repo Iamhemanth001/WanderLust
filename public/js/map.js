@@ -7,63 +7,73 @@ if (typeof mapApi === 'undefined' || typeof coordinates === 'undefined') {
 const platform = new H.service.Platform({
     apikey: mapApi,
 });
-const defaultLayers = platform.createDefaultLayers();
 
-// Step 2: initialize a map - this map is centered over the provided coordinates
+// Step 2: Create Raster Tile API v3 provider (no deprecated MapTileService)
+const rasterTileProvider = new H.map.provider.ImageTileProvider({
+    label: 'RasterTileProvider',
+    tileUrl: `https://{1-4}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?apiKey=${mapApi}`,
+    subDomains: ['1', '2', '3', '4'],
+    tileSize: 256,
+    pixelRatio: window.devicePixelRatio || 1
+});
+
+// Create the raster tile layer
+const rasterTileLayer = new H.map.layer.TileLayer(rasterTileProvider);
+
+// Step 3: initialize the map and center it on the provided coordinates
 const mapContainer = document.getElementById("map");
-if (mapContainer) {
-    const map = new H.Map(
-        mapContainer,
-        defaultLayers.raster.normal.map,
-        {
-            zoom: 12,
-            center: { lat: coordinates[1], lng: coordinates[0] }
-        }
-    );
 
-    // Step 3: make the map interactive
+if (mapContainer) {
+    const map = new H.Map(mapContainer, rasterTileLayer, {
+        zoom: 12,
+        center: { lat: coordinates[1], lng: coordinates[0] }
+    });
+
+    // Step 4: make the map interactive (zoom, drag)
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-    // Step 4: create the default UI components
-    const ui = H.ui.UI.createDefault(map, defaultLayers);
+    // Step 5: create default UI components
+    const ui = H.ui.UI.createDefault(map, rasterTileLayer);
 
-    // Resize the map when the window is resized
+    // Resize map automatically on window resize
     window.addEventListener('resize', () => map.getViewPort().resize());
 
-    // Create a custom icon for the marker similar to Google Maps red marker
-    const customIcon = new H.map.Icon('../marker.png', { size: { w: 40, h: 40 } });
+    // Step 6: create a custom icon for the marker
+    const customIcon = new H.map.Icon('/images/marker.png', { size: { w: 40, h: 40 } });
 
-    // Add a marker to the map at the provided coordinates with the custom icon
+    // Add marker at the provided coordinates
     const marker = new H.map.Marker({ lat: coordinates[1], lng: coordinates[0] }, { icon: customIcon });
     map.addObject(marker);
 
+    // Create InfoBubble (popup)
     function createInfoBubble() {
-        return new H.ui.InfoBubble({ lat: coordinates[1], lng: coordinates[0] }, {
-            content: `<div class="popup-content"><p>Exact location provided after booking!</p></div>`,
-            offset: { x: 0, y: -40 },
-        });
+        return new H.ui.InfoBubble(
+            { lat: coordinates[1], lng: coordinates[0] },
+            {
+                content: `<div class="popup-content"><p>Exact location provided after booking!</p></div>`,
+                offset: { x: 0, y: -40 },
+            }
+        );
     }
 
-    // Step 6: Attach the popup to the marker
+    // Show popup on marker click
     marker.addEventListener('tap', function() {
-        ui.getBubbles().forEach(bubble => bubble.close()); // Close any open bubbles
+        ui.getBubbles().forEach(bubble => bubble.close()); // Close existing bubbles
         const infoBubble = createInfoBubble();
         customizeInfoBubble(infoBubble);
         ui.addBubble(infoBubble);
-        setTimeout(() => {
-            customizeInfoBubble(infoBubble);
-        }, 0);
+        setTimeout(() => customizeInfoBubble(infoBubble), 0);
     });
 
+    // Style the InfoBubble
     function customizeInfoBubble(infoBubble) {
-        const bubbleElement = infoBubble.getElement();  // Get the InfoBubble's DOM element
+        const bubbleElement = infoBubble.getElement();
         if (bubbleElement) {
-            // Apply custom width here
-            bubbleElement.style.width = '250px';  // Set the desired width of the InfoBubble
-            bubbleElement.style.height = '-100px';  // Set the desired width of the InfoBubble
+            bubbleElement.style.width = '250px';
+            // Removed invalid height; use margin or padding instead
+            bubbleElement.style.marginTop = '-20px';
         }
     }
-    
 } else {
     console.error("Map container element not found.");
 }
