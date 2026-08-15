@@ -47,9 +47,10 @@
 </style>
 
 <script>
-    let mapApi = "<%= process.env.MAP_API %>";
     let coordinates = <%= JSON.stringify(listing.geometry.coordinates) %>;
 </script>
+
+
 
 <div class="row mt-3 mb-4">
     <div class="col-8 offset-3 cus-title">
@@ -155,5 +156,14 @@
         <div id="map" style="width: 100%; height: 500px;"></div>
     </div>
 </div>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 <script src="/js/map.js"></script>
