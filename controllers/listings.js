@@ -33,21 +33,35 @@ module.exports.renderNewForm = (req, res) => {
     res.render("listings/new.ejs");
 };
 
-module.exports.createNewListing = async (req,res,next) => {
-    const fetch = (await import('node-fetch')).default;
-    const address = req.body.listing.location + ', ' + req.body.listing.country;
-    const mapApi = process.env.MAP_API;
+module.exports.createNewListing = async (req, res, next) => {
+    const fetch = (await import("node-fetch")).default;
+
+    const address = req.body.listing.location + ", " + req.body.listing.country;
 
     const geocodeAddress = async (address) => {
-        const url = `https://geocode.search.hereapi.com/v1/geocode?q=${encodeURIComponent(address)}&apikey=${mapApi}`;
-    
+        const url = `https://nominatim.openstreetmap.org/search?` + `format=jsonv2&limit=1&q=${encodeURIComponent(address)}`;
+
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                headers: {
+                    "User-Agent": "Wanderlust-Portfolio-App/1.0"
+                }
+            });
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             const data = await response.json();
-            return data.items[0].position; // Return the geocoded position
+
+            if (!data.length) {
+                return null;
+            }
+
+            return {
+                lat: parseFloat(data[0].lat),
+                lng: parseFloat(data[0].lon)
+            };
         } catch (error) {
             console.error("Error geocoding address:", error);
             return null;
@@ -55,26 +69,37 @@ module.exports.createNewListing = async (req,res,next) => {
     };
 
     const position = await geocodeAddress(address);
+
     if (!position) {
-        req.flash("error", "Error geocoding address. Please try again.");
+        req.flash(
+            "error",
+            "Location could not be found. Please enter a valid location."
+        );
         return res.redirect("/listings/new");
     }
-
-    // console.log(position);
 
     let url = req.file.path;
     let filename = req.file.filename;
     let listing = req.body.listing;
 
     const newListing = new Listing(listing);
+
     newListing.owner = req.user._id;
-    newListing.image = {url,filename};
+
+    newListing.image = {
+        url,
+        filename
+    };
+
     newListing.geometry = {
         type: "Point",
         coordinates: [position.lng, position.lat]
     };
+
     await newListing.save();
-    req.flash("success","New Listing Created!");
+
+    req.flash("success", "New Listing Created!");
+
     res.redirect("/listings");
 };
 
